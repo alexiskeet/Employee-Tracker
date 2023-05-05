@@ -70,8 +70,8 @@ app.delete('/api/department/:id', (req, res) => {
     });
 });
 
-app.get('/api/role', (req,res) => {
-    const sql = `SELECT department.department_name AS department, role.role_title FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY department.department_name;`;
+app.get('/api/roles', (req,res) => {
+    const sql = `SELECT department.department_name AS department, roles.roles_title FROM roles LEFT JOIN department ON roles.department_id = department.id ORDER BY department.department_name;`;
     db.query(sql, (err,rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -85,7 +85,7 @@ app.get('/api/role', (req,res) => {
 });
 
 app.get('/api/employee', (req, res) => {
-    const sql = `SELECT role.role_title AS role, employee.first_name FROM employee LEFT JOIN role ON employee.role_id = role.id ORDER BY role.role_title; `;
+    const sql = `SELECT roles.roles_title AS roles, employee.first_name FROM employee LEFT JOIN roles ON employee.roles_id = roles.id ORDER BY roles.roles_title; `;
     db.query(sql, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
