@@ -8,18 +8,29 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-Connection.connect(function(err) {
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: '01252003Ak.',
+        database: 'employee_db'
+    },
+    console.log('Connected to the employee_db database')
+);
+
+db.connect(function(err) {
     if (err) throw err;
     initialPrompts();
 });
 
+//menu
 function initialPrompts(){
     inquirer.prompt([
         {
             type: 'list',
             name: 'input',
             message: 'What would you like to do?',
-            choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Exit']
+            choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department']
         }
     ]) .then(function(response) {
         if(response.input === 'View All Employees') {
@@ -50,39 +61,150 @@ function initialPrompts(){
             addDepartment();
             return;
         }
-        else if (response.input === 'Exit') {
-            exit();
-            return;
-        }
+        // else if (response.input === 'Exit') {
+        //     exit();
+        //     return;
+        // }
     })
 }
 
 //viewAllEmployees()
+function viewAllEmployees() {
+const query = 'Select * FROM employee';
+db.query(query, function (err, response) {
+    if(err) throw err;
+    console.table(response);
+    initialPrompts();
+});
+}
 
 //addEmployee()
 
+function addEmployee() {
+inquirer.prompt([
+    {
+        type: 'input',
+        name: 'employeeFirst',
+        message: 'What is the employees first name?'
+    },
+    {
+        type: 'input',
+        name: 'employeeLast',
+        message: 'What is the employees last name?'
+    },
+    {
+        type: 'input',
+        name: 'employeeRoleID',
+        message: 'What is the employees role id?'
+    },
+    {
+        type: 'input',
+        name: 'employeeManagerID',
+        message: 'What is this employees manager ID?'
+    }
+])
+.then (function(response) {
+db.query('INSERT INTO employee (first_name, last_name, roles_id, manager_id) VALUES (?, ?, ?, ?)', [response.employeeFirst, response.employeeLast, response.employeeRoleID, response.employeeManagerID], function(err, response) {
+    if (err) throw err;
+    console.table(response);
+    initialPrompts();
+});
+});
+}
+
 //updateEmployeeRole()
+function updateEmployeeRole () {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'employeeUpdate',
+            message: 'Which employee are you updating?'
+        },
+        {
+            type: 'input',
+            name: 'employeeUpdateRole',
+            message: 'Which role would you like to switch your employee to?'
+        }
+    ])
+    .then (function(response) {
+        db.query('UPDATE employee SET roles_id=? WHERE first_name=?', [response.employeeUpdateRole, answer.employeeUpdate], function(err, response) {
+            if (err) throw err;
+            console.table(response);
+            initialPrompts();
+        });
+    });
+}
 
 //viewAllRoles()
+function viewAllRoles(){
+const query = 'SELECT * FROM roles';
+db.query(query, function(err, response) {
+    if (err) throw (err);
+    console.table(response);
+    initialPrompts();
+});
+}
 
 //addRole()
+function AddRole() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'roleType',
+            message: 'What is the role?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary for this role?'
+        },
+        {
+            type: 'input',
+            name: 'department',
+            message: 'What is the department id this role belongs to?'
+        }
+    ])
+    .then(function(resposne) {
+        db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.roleType, response.salary, response.department], function(err, response) {
+            if (err) throw err;
+            console.table(response);
+            initialPrompts();
+        });
+    });
+}
 
 //viewAllDepartments();
+function viewAllDepartments(){
+    const query = 'SELECT * FROM department';
+    db.query(query, function(err, response) {
+        if (err) throw (err);
+        console.table(response);
+        initialPrompts();
+    });
+    }
 
 //addDepartment()
+function addDepartment() {
+inquirer.prompt() ([
+    {
+        type: 'input',
+        name: 'departmentName',
+        message: 'What is this departments name?'
+    }
+])
+.then(function(resposne) {
+    db.query('INSERT INTO department (name) VALUES (?)', [response.departmentName], function(err, response) {
+        if (err) throw err;
+        console.table(response);
+        initialPrompts();
+    });
+});
+}
 
 //exit()
+// write this in later to exit 
 
 
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: '01252003Ak.',
-        database: 'employee_db'
-    },
-    console.log('Connected to the employee_db database')
-);
 
 app.post('/api/new-department', ({ body }, res) => {
     const sql = `INSERT INTO department (department_name) 
