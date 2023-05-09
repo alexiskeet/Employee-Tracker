@@ -91,22 +91,11 @@ inquirer.prompt([
         type: 'input',
         name: 'employeeLast',
         message: 'What is the employees last name?'
-    },
-    // {
-    //     type: 'input',
-    //     name: 'employeeRoleID',
-    //     message: 'What is the employees role id?'
-    // },
-    // {
-    //     type: 'input',
-    //     name: 'employeeManagerID',
-    //     message: 'What is this employees manager ID?'
-    // }
+    }
 ])
 .then (function(response) {
-db.query('INSERT INTO employee (first_name, last_name, roles_id, manager_id) VALUES (?, ?, ?, ?)', [response.employeeFirst, response.employeeLast, response.employeeRoleID, response.employeeManagerID], function(err, response) {
+db.query('INSERT INTO employee (first_name, last_name, roles_id, manager_id) VALUES (?, ?, ?, ?)', [response.employeeFirst, response.employeeLast, response.employeeRoleID, response.employeeManagerID], function(err) {
     if (err) throw err;
-    console.table(response);
     initialPrompts();
 });
 });
@@ -127,9 +116,8 @@ function updateEmployeeRole () {
         }
     ])
     .then (function(response) {
-        db.query('UPDATE employee SET roles_id=? WHERE first_name=?', [response.employeeUpdateRole, answer.employeeUpdate], function(err, response) {
+        db.query('UPDATE employee SET roles_id=? WHERE first_name=?', [response.employeeUpdateRole, answer.employeeUpdate], function(err) {
             if (err) throw err;
-            console.table(response);
             initialPrompts();
         });
     });
@@ -146,7 +134,7 @@ db.query(query, function(err, response) {
 }
 
 //addRole()
-function AddRole() {
+function addRole() {
     inquirer.prompt([
         {
             type: 'input',
@@ -158,16 +146,15 @@ function AddRole() {
             name: 'salary',
             message: 'What is the salary for this role?'
         },
-        {
-            type: 'input',
-            name: 'department',
-            message: 'What is the department id this role belongs to?'
-        }
+        // {
+        //     type: 'input',
+        //     name: 'department',
+        //     message: 'What is the department id this role belongs to?'
+        // }
     ])
-    .then(function(resposne) {
-        db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.roleType, response.salary, response.department], function(err, response) {
+    .then(function(response) {
+        db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.roleType, response.salary, response.department], function(err) {
             if (err) throw err;
-            console.table(response);
             initialPrompts();
         });
     });
@@ -192,10 +179,9 @@ inquirer.prompt() ([
         message: 'What is this departments name?'
     }
 ])
-.then(function(resposne) {
-    db.query('INSERT INTO department (name) VALUES (?)', [response.departmentName], function(err, response) {
+.then(function(response) {
+    db.query('INSERT INTO department (name) VALUES (?)', [response.departmentName], function(err) {
         if (err) throw err;
-        console.table(response);
         initialPrompts();
     });
 });
@@ -205,7 +191,7 @@ inquirer.prompt() ([
 // write this in later to exit 
 
 
-
+// my routes for testing in insomnia
 app.post('/api/new-department', ({ body }, res) => {
     const sql = `INSERT INTO department (department_name) 
     VALUES (?)`;
