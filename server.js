@@ -92,16 +92,16 @@ inquirer.prompt([
         name: 'employeeLast',
         message: 'What is the employees last name?'
     },
-    {
-        type: 'input',
-        name: 'employeeRoleID',
-        message: 'What is the employees role id?'
-    },
-    {
-        type: 'input',
-        name: 'employeeManagerID',
-        message: 'What is this employees manager ID?'
-    }
+    // {
+    //     type: 'input',
+    //     name: 'employeeRoleID',
+    //     message: 'What is the employees role id?'
+    // },
+    // {
+    //     type: 'input',
+    //     name: 'employeeManagerID',
+    //     message: 'What is this employees manager ID?'
+    // }
 ])
 .then (function(response) {
 db.query('INSERT INTO employee (first_name, last_name, roles_id, manager_id) VALUES (?, ?, ?, ?)', [response.employeeFirst, response.employeeLast, response.employeeRoleID, response.employeeManagerID], function(err, response) {
