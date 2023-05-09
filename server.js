@@ -65,7 +65,7 @@ function initialPrompts(){
         //     exit();
         //     return;
         // }
-    })
+    });
 }
 
 //viewAllEmployees()
@@ -145,7 +145,7 @@ function addRole() {
             type: 'input',
             name: 'salary',
             message: 'What is the salary for this role?'
-        },
+        }
         // {
         //     type: 'input',
         //     name: 'department',
@@ -172,7 +172,7 @@ function viewAllDepartments(){
 
 //addDepartment()
 function addDepartment() {
-inquirer.prompt() ([
+inquirer.prompt ([
     {
         type: 'input',
         name: 'departmentName',
@@ -180,7 +180,7 @@ inquirer.prompt() ([
     }
 ])
 .then(function(response) {
-    db.query('INSERT INTO department (name) VALUES (?)', [response.departmentName], function(err) {
+    db.query('INSERT INTO department (department_name) VALUES (?)', [response.departmentName], function(err) {
         if (err) throw err;
         initialPrompts();
     });

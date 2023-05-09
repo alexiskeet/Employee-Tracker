@@ -1,4 +1,4 @@
-SELECT department.department_name AS department, roles.title
+SELECT department.name AS department, roles.title
 FROM roles
 JOIN department
 ON roles.department_id = department.id
