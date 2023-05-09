@@ -61,10 +61,7 @@ function initialPrompts(){
             addDepartment();
             return;
         }
-        // else if (response.input === 'Exit') {
-        //     exit();
-        //     return;
-        // }
+
     });
 }
 
@@ -146,11 +143,7 @@ function addRole() {
             name: 'salary',
             message: 'What is the salary for this role?'
         }
-        // {
-        //     type: 'input',
-        //     name: 'department',
-        //     message: 'What is the department id this role belongs to?'
-        // }
+
     ])
     .then(function(response) {
         db.query('INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)', [response.roleType, response.salary, response.department], function(err) {
@@ -187,8 +180,7 @@ inquirer.prompt ([
 });
 }
 
-//exit()
-// write this in later to exit 
+
 
 
 // my routes for testing in insomnia
