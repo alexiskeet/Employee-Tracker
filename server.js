@@ -1,11 +1,78 @@
 const express = require('express');
 const mysql = require('mysql2');
+const inquirer = require('inquirer');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+Connection.connect(function(err) {
+    if (err) throw err;
+    initialPrompts();
+});
+
+function initialPrompts(){
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'input',
+            message: 'What would you like to do?',
+            choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Exit']
+        }
+    ]) .then(function(response) {
+        if(response.input === 'View All Employees') {
+            viewAllEmployees();
+            return;
+        }
+        else if (response.input === 'Add Employee') {
+            addEmployee();
+            return;
+        }
+        else if (response.input === 'Update Employee Role') {
+            updateEmployeeRole();
+            return;
+        }
+        else if (response.input === 'View All Roles') {
+            viewAllRoles();
+            return;
+        }
+        else if (response.input === 'Add Role') {
+            addRole();
+            return;
+        }
+        else if (response.input === 'View All Departments') {
+            viewAllDepartments();
+            return;
+        }
+        else if (response.input === 'Add Department') {
+            addDepartment();
+            return;
+        }
+        else if (response.input === 'Exit') {
+            exit();
+            return;
+        }
+    })
+}
+
+//viewAllEmployees()
+
+//addEmployee()
+
+//updateEmployeeRole()
+
+//viewAllRoles()
+
+//addRole()
+
+//viewAllDepartments();
+
+//addDepartment()
+
+//exit()
+
 
 const db = mysql.createConnection(
     {
@@ -37,7 +104,7 @@ app.post('/api/new-department', ({ body }, res) => {
 app.get('/api/department', (req, res) => {
     const sql = `SELECT id, department_name AS name FROM department`;
 
-    brotliDecompress.query(sql, (err, data) => {
+    db.query(sql, (err, data) => {
         if(err) {
             res.status(500).json({ error: err.message });
             return;
